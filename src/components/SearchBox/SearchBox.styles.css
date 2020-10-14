@@ -1,0 +1,14 @@
+.search-box {
+  margin-bottom: 30px;
+}
+.search-box > input {
+  background: #F5F6F7;
+  border: 0;
+  border-radius: 8px;
+  font-size: 12px;
+  width: 250px;
+  padding: 8px 15px;
+}
+.search-box > input::placeholder {
+  color: #C6C8CC;
+}
