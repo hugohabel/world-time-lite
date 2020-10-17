@@ -10,8 +10,6 @@ import './EntryTimes.styles.css';
 function EntryTimes(props) {
     const timeEntries = generateTimeEntries(props.data.timeAndDate.datetime);
 
-    console.log(timeEntries);
-
     return (
         <div className="entry-times">
             <ul>

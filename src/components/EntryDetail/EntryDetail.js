@@ -12,7 +12,7 @@ function EntryDetails(props) {
             <span>
                 { props.data.isHome && <FontAwesomeIcon icon={faHome} /> }
 
-                { !props.data.isHome && `${props.data.timeAndDate.timeDifference}` }
+                { !props.data.isHome && props.data.timeDifference && `${props.data.timeDifference}` }
             </span>
 
             <div className="entry-details__place">
@@ -21,7 +21,7 @@ function EntryDetails(props) {
             </div>
 
             <div className="entry-details__time">
-                <p className="title">{ `${props.data.timeAndDate.time} ${props.data.timeAndDate.timezone}` }</p>
+                <p className="title">{ `${props.data.timeAndDate.time}` }</p>
                 <p className="subtitle">{ props.data.timeAndDate.date }</p>
             </div>
         </div>

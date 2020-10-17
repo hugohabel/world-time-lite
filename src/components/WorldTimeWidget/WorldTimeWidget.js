@@ -1,9 +1,11 @@
 // External Dependencies
 import React from 'react';
+import moment from "moment";
 
 // Custom Dependencies
 import SearchBox from '../SearchBox/SearchBox';
 import Entry from '../Entry/Entry';
+import { getCityDateTime } from '../../utils/utils';
 
 // Styles
 import './WorldTimeWidget.styles.css';
@@ -12,57 +14,77 @@ export default class WorldTimeWidget extends React.Component {
     constructor(props) {
         super(props);
 
+        this.listOfEntries = [
+            {
+                id: 'Q9022',
+                name: 'Guadalajara',
+                region: 'Jalisco',
+                country: 'Mexico',
+                isHome: true
+            }, {
+                id: 'Q84',
+                name: 'London',
+                region: 'England',
+                country: 'United Kingdom',
+                isHome: false
+            }, {
+                id: 'Q189138',
+                name: 'Hermosillo',
+                region: 'Sonora',
+                country: 'Mexico',
+                isHome: false
+            }
+        ];
+
         this.state = {
-            entries: [
-                {
-                    id: '0000000001',
-                    isHome: true,
-                    location: {
-                        city: 'Guadalajara',
-                        country: 'Mexico'
-                    },
-                    timeAndDate: {
-                        datetime: '2020-09-24T18',
-                        time: '8:08pm',
-                        timezone: 'CDT',
-                        date: 'Thu, Sep 24',
-                        timeDifference: 0
-                    }
-                },
-                {
-                    id: '0000000002',
-                    isHome: false,
-                    location: {
-                        city: 'London',
-                        country: 'England'
-                    },
-                    timeAndDate: {
-                        datetime: '2020-09-25T00',
-                        time: '2:08am',
-                        timezone: 'BST',
-                        date: 'Fri, Sep 25',
-                        timeDifference: '+6'
-                    }
-                },
-                {
-                    id: '0000000003',
-                    isHome: false,
-                    location: {
-                        city: 'Hermosillo',
-                        country: 'Mexico'
-                    },
-                    timeAndDate: {
-                        datetime: '2020-09-24T16',
-                        time: '6:08pm',
-                        timezone: 'MST',
-                        date: 'Thu, Sep 24',
-                        timeDifference: '-2'
-                    }
-                }
-            ]
+            entries: []
         };
 
         this.handleAction = this.handleAction.bind(this);
+        this.handleAddition = this.handleAddition.bind(this);
+        this.calculateTimezoneDifferences = this.calculateTimezoneDifferences.bind(this);
+    }
+
+    waitPromise(ms) {
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                resolve(ms);
+            }, ms);
+        });
+    }
+
+    calculateTimezoneDifferences() {
+        const homeCity = this.state.entries.find((city) => {
+            return city.isHome;
+        });
+
+        this.setState((state) => {
+            return {
+                entries: this.state.entries.map((city) => {
+                    return {
+                        ...city,
+                        timeDifference: moment.parseZone(city.timeAndDate.datetime).diff(moment.parseZone(homeCity.timeAndDate.datetime), 'hours')
+                    }
+                })
+            };
+        });
+    };
+
+    componentDidMount() {
+        const getListOfEntries = async () => {
+            for (const entry of this.listOfEntries) {
+                getCityDateTime(entry)
+                    .then((data) => {
+                        let tmpArray = this.state.entries.concat(data);
+                        this.setState({ entries: tmpArray });
+                    });
+                await this.waitPromise(2000); // Hack to avoid making too many requests to the API.
+            }
+        };
+
+        getListOfEntries().then(() => {
+            this.calculateTimezoneDifferences();
+        });
     }
 
     handleAction(entryId) {
@@ -71,10 +93,21 @@ export default class WorldTimeWidget extends React.Component {
         })});
     }
 
+    handleAddition(city) {
+        getCityDateTime(city)
+            .then((data) => {
+                let tmpArray = this.state.entries.concat(data);
+                this.setState({ entries: tmpArray });
+            })
+            .then(() => {
+                this.calculateTimezoneDifferences();
+            });
+    }
+
     render() {
         return (
             <div className="world-time-widget">
-                <SearchBox />
+                <SearchBox onAdd={this.handleAddition} />
 
                 { this.state.entries && this.state.entries.map((entry) => <Entry key={entry.id} data={entry} onRemove={this.handleAction} />) }
             </div>
