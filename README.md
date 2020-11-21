@@ -4,6 +4,8 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 Web component to compare multiple timezones.
 
+**No responsive design.**
+
 ## Technologies used
 
 - React

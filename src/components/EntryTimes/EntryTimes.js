@@ -17,7 +17,7 @@ function EntryTimes(props) {
                     let styles = generateStyles(timeEntry);
                     styles += index === 1 ? ' current-time' : '';
 
-                    return <li className={styles}>{ timeEntry.main } <br/> <span>{ timeEntry.secondary }</span></li>;
+                    return <li className={styles}>{ timeEntry.main } <span>{ timeEntry.secondary }</span></li>;
                 }) }
             </ul>
         </div>

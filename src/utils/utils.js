@@ -101,5 +101,4 @@ const calculateTimezoneDifferences = function(listOfCities) {
     });
 };
 
-
 export { generateTimeEntries, generateStyles, getCityDateTime, calculateTimezoneDifferences };
