@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "39c1b4ba2e9c190b5724bdd1e7634ff5",
+    "revision": "ce39f8ec21cbe36773aee3b6d06aac4e",
     "url": "/world-time-lite/index.html"
   },
   {
