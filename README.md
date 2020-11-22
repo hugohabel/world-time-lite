@@ -6,6 +6,8 @@ Web component to compare multiple timezones.
 
 **No responsive design.**
 
+**Automated Testing under development.**
+
 ## Technologies used
 
 - React
@@ -13,3 +15,6 @@ Web component to compare multiple timezones.
 - HTML
 - CSS
 
+## APIs
+
+[GeoDB Cities](https://rapidapi.com/wirefreethought/api/geodb-cities/details)
